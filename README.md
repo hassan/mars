@@ -1,21 +1,31 @@
 # Mars
 
-**TODO: Add description**
+A quickie implementation of a "Mars Rover" exercise in Elixir
+where the "rover" is a GenServer that responds to `locate` and `instruct`.
 
-## Installation
+Does not understand boundaries yet!
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `mars` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:mars, "~> 0.1.0"}
-  ]
-end
 ```
+> iex -S mix
+Erlang/OTP 21 [erts-10.0.4] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:1] [hipe] [dtrace]
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/mars](https://hexdocs.pm/mars).
-
+Compiling 1 file (.ex)
+Interactive Elixir (1.7.2) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)> {:ok, pid} = GenServer.start_link(Mars.Rover, %{x: 1, y: 2, dir: :north})
+{:ok, #PID<0.146.0>}
+iex(2)> GenServer.call(pid, :locate)
+%{dir: :north, x: 1, y: 2}
+iex(3)> GenServer.cast(pid, {:instruct, "M"})
+:ok
+iex(4)> GenServer.call(pid, :locate)
+%{dir: :north, x: 1, y: 3}
+iex(5)> GenServer.cast(pid, {:instruct, "MM"})
+:ok
+iex(6)> GenServer.call(pid, :locate)
+%{dir: :north, x: 1, y: 5}
+iex(7)> GenServer.cast(pid, {:instruct, "RM"})
+:ok
+iex(8)> GenServer.call(pid, :locate)
+%{dir: :east, x: 2, y: 5}
+iex(9)>
+```

@@ -1,22 +1,36 @@
 defmodule Mars.Rover do
-  def instruct(plateau, position, commands) when commands == "" do
+  use GenServer
+
+  def init(position) do
+    {:ok, position}
+  end
+
+  def handle_call(:locate, _from, position) do
+    {:reply, position, position}
+  end
+
+  def handle_cast({:instruct, commands}, position) do
+    {:noreply, instruct(position, commands)}
+  end
+
+  def instruct(position, commands) when commands == "" do
     position
   end
 
-  def instruct(plateau, position, commands) do
+  def instruct(position, commands) do
     [hd | tl] = String.split(commands, "", trim: true)
 
     new_position =
       case hd do
-        "M" -> move(plateau, position)
-        "L" -> turn(plateau, position, "L")
-        "R" -> turn(plateau, position, "R")
+        "M" -> move(position)
+        "L" -> turn(position, "L")
+        "R" -> turn(position, "R")
       end
 
-    instruct(plateau, new_position, Enum.join(tl, ""))
+    instruct(new_position, Enum.join(tl, ""))
   end
 
-  def move(plateau, position) do
+  def move(position) do
     case position do
       %{x: x, y: y, dir: :north} -> %{x: x, y: y + 1, dir: :north}
       %{x: x, y: y, dir: :south} -> %{x: x, y: y - 1, dir: :south}
@@ -26,7 +40,7 @@ defmodule Mars.Rover do
     end
   end
 
-  def turn(plateau, position, command) do
+  def turn(position, command) do
     position_change = Map.put_new(position, :cmd, command)
 
     case position_change do
