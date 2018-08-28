@@ -1,4 +1,9 @@
 defmodule Mars.Commander do
+  def launch(landing_zone \\ %{dir: :north, x: 3, y: 3}) do
+    children = [%{id: Rover, start: {Mars.Rover, :start_link, [landing_zone]}}]
+    Supervisor.start_link(children, strategy: :one_for_one)
+  end
+
   def move(pid) do
     GenServer.cast(pid, {:instruct, "M"})
   end
