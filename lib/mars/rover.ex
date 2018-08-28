@@ -1,6 +1,10 @@
 defmodule Mars.Rover do
   use GenServer
 
+  def start_link(position) do
+    GenServer.start_link(__MODULE__, position, name: Rover)
+  end
+
   def init(position) do
     {:ok, position}
   end
@@ -25,6 +29,7 @@ defmodule Mars.Rover do
         "M" -> move(position)
         "L" -> turn(position, "L")
         "R" -> turn(position, "R")
+        _ -> position
       end
 
     instruct(new_position, Enum.join(tl, ""))
@@ -52,6 +57,7 @@ defmodule Mars.Rover do
       %{x: _, y: _, dir: :east, cmd: "R"} -> %{position | dir: :south}
       %{x: _, y: _, dir: :south, cmd: "R"} -> %{position | dir: :west}
       %{x: _, y: _, dir: :west, cmd: "R"} -> %{position | dir: :north}
+      _ -> position
     end
   end
 end

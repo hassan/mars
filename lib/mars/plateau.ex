@@ -1,4 +1,4 @@
-defmodule Plateau do
+defmodule Mars.Plateau do
   use GenServer
 
   def init(boundary) do
