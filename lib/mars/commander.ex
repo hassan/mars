@@ -1,6 +1,10 @@
 defmodule Mars.Commander do
-  def launch(landing_zone \\ %{dir: :north, x: 3, y: 3}) do
-    children = [%{id: Rover, start: {Mars.Rover, :start_link, [landing_zone]}}]
+  def launch(landing_zone \\ %{dir: :north, x: 0, y: 0}) do
+    children = [
+      %{id: Historian, start: {Mars.Historian, :start_link, [%{}]}},
+      %{id: Rover, start: {Mars.Rover, :start_link, [landing_zone]}}
+    ]
+
     Supervisor.start_link(children, strategy: :one_for_one)
   end
 
@@ -14,5 +18,9 @@ defmodule Mars.Commander do
 
   def locate(pid) do
     GenServer.call(pid, :locate)
+  end
+
+  def current(pid) do
+    GenServer.call(pid, :current)
   end
 end

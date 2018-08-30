@@ -1,12 +1,14 @@
 defmodule Mars.Rover do
   use GenServer
+  require IEx
 
   def start_link(position) do
     GenServer.start_link(__MODULE__, position, name: Rover)
   end
 
   def init(position) do
-    {:ok, position}
+    starting_position = Map.merge(position, GenServer.call(Historian, :current))
+    {:ok, starting_position}
   end
 
   def handle_call(:locate, _from, position) do
@@ -32,6 +34,7 @@ defmodule Mars.Rover do
         _ -> position
       end
 
+    GenServer.cast(Historian, {:update, new_position})
     instruct(new_position, Enum.join(tl, ""))
   end
 
