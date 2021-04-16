@@ -1,4 +1,6 @@
 defmodule Mars.Rover do
+  @moduledoc false
+
   use GenServer
   require IEx
 

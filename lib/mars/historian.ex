@@ -2,6 +2,8 @@ defmodule Mars.Historian do
   use GenServer
   require EtsUtility
 
+  @moduledoc false
+
   def start_link(position) do
     GenServer.start_link(__MODULE__, position, name: Historian)
   end

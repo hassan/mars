@@ -1,4 +1,6 @@
 defmodule Mars.Commander do
+  @moduledoc false
+
   def launch(landing_zone \\ %{dir: :north, x: 0, y: 0}) do
     children = [
       %{id: Historian, start: {Mars.Historian, :start_link, [%{}]}},

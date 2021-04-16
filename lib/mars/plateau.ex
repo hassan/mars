@@ -1,6 +1,8 @@
 defmodule Mars.Plateau do
   use GenServer
 
+  @moduledoc false
+
   def init(boundary) do
     {:ok, boundary}
   end
